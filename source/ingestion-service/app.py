@@ -1,13 +1,5 @@
-"""
-Ingestion Service – IoT Sensor Discovery & Polling
-
-On startup the service discovers available REST sensors from the sensor API,
-then continuously polls each sensor every 5 seconds and prints the readings.
-"""
-
 import asyncio
 from contextlib import asynccontextmanager
-
 import httpx
 import uvicorn
 from fastapi import FastAPI
@@ -19,11 +11,11 @@ POLL_INTERVAL_SECONDS = 5
 sensor_list: list[str] = []
 _poll_task: asyncio.Task | None = None
 _http_client: httpx.AsyncClient | None = None
+latest_sensor_data: dict[str, dict] = {}
 
 
 # Background polling -----------------------------------------------------------
 async def poll_sensors() -> None:
-    """Continuously poll every discovered sensor and print its reading."""
     while True:
         for sensor_name in sensor_list:
             try:
@@ -33,7 +25,7 @@ async def poll_sensors() -> None:
                 response.raise_for_status()
                 payload = response.json()
                 print(f"[Sensor: {sensor_name}] {payload}\n")
- 
+                latest_sensor_data[sensor_name] = payload
             except httpx.HTTPStatusError as exc:
                 print(
                     f"[Sensor: {sensor_name}] HTTP error "
@@ -49,7 +41,6 @@ async def poll_sensors() -> None:
 # Lifespan ---------------------------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Manage startup (sensor discovery + polling) and shutdown (cleanup)."""
     global sensor_list, _poll_task, _http_client
 
     # --- Startup ---
@@ -72,7 +63,7 @@ async def lifespan(app: FastAPI):
     if sensor_list:
         _poll_task = asyncio.create_task(poll_sensors())
 
-    yield  # ← application is running
+    yield
 
     # --- Shutdown ---
     if _poll_task is not None:
@@ -95,7 +86,5 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
-# Dev entry point --------------------------------------------------------------
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000)

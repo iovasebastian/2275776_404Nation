@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ---------------------------------------------------------
   # 1. 外部提供的火星模拟器 / Externally provided Mars Simulator

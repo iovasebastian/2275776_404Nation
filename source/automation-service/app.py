@@ -41,7 +41,6 @@ async def trigger_actuator(client: httpx.AsyncClient, actuator_name: str, action
 async def process_event(payload: Dict[str, Any], client: httpx.AsyncClient) -> None:
     sensor_id = payload.get("sensor_id")
     measurements = payload.get("measurements", [])
-    print(sensor_id, measurements)
 
     if not sensor_id or not measurements:
         logger.warning("Invalid payload received: %s", payload)
@@ -69,7 +68,6 @@ async def process_event(payload: Dict[str, Any], client: httpx.AsyncClient) -> N
             }
 
             for rule in rules:
-                print(rules)
                 try:
                     if evaluate_rule(rule, float(value)):
                         try:

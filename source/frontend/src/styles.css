@@ -1,0 +1,303 @@
+:root {
+  --bg: #0a111c;
+  --panel: #111b2c;
+  --line: #5ac8ff;
+  --text: #e8f0ff;
+  --muted: #9cb2ce;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(90, 200, 255, 0.16), transparent 45%),
+    radial-gradient(circle at 100% 100%, rgba(255, 142, 106, 0.16), transparent 45%),
+    var(--bg);
+}
+
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.top,
+h1,
+h2,
+h3,
+h4 {
+  text-align: center;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 34px);
+}
+
+.page-switch {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.page-switch button {
+  min-width: 260px;
+}
+
+.active-tab {
+  border-color: #5aa8e8;
+  background: #22486d;
+}
+
+.page-content {
+  margin-top: 16px;
+}
+
+.row-block {
+  margin-bottom: 14px;
+}
+
+.block {
+  background: var(--panel);
+  border: 1px solid #273954;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.sensor-grid,
+.actuator-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.sensor-card,
+.actuator-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #2f4564;
+  border-radius: 12px;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.sensor-value {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+button,
+select,
+input {
+  background: #17263c;
+  color: var(--text);
+  border: 1px solid #3b5678;
+  border-radius: 9px;
+  padding: 7px 10px;
+}
+
+button:hover {
+  filter: brightness(1.08);
+  cursor: pointer;
+}
+
+.actuator-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toggle-switch {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  width: 122px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #4f657f;
+}
+
+.toggle-switch.on {
+  background: #2f8662;
+  border-color: #56b88f;
+}
+
+.toggle-switch.off {
+  background: #dce3ed;
+  border-color: #b9c7d8;
+}
+
+.toggle-switch button {
+  border: 0;
+  border-radius: 0;
+  padding: 5px 0;
+  font-size: 12px;
+  font-weight: 600;
+  background: transparent;
+  color: #133;
+}
+
+.toggle-switch.on button {
+  color: #07331f;
+}
+
+.toggle-switch.off button {
+  color: #344459;
+}
+
+.toggle-switch button.selected {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+  gap: 12px;
+}
+
+.chart-panel {
+  border: 1px solid #314764;
+  border-radius: 12px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+}
+
+.chart-bg {
+  fill: #0f1a2a;
+}
+
+.axis {
+  stroke: #375070;
+  stroke-width: 1;
+}
+
+.line {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2;
+}
+
+.point {
+  fill: #83deff;
+}
+
+.point-label {
+  fill: #d9f3ff;
+  font-size: 9px;
+}
+
+.meta {
+  fill: #89a9c8;
+  font-size: 10px;
+}
+
+.empty {
+  color: var(--muted);
+  padding: 20px 4px;
+  text-align: center;
+}
+
+.rule-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 10px 0 14px;
+}
+
+.rule-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.rule-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rule-action-btn {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  min-width: 138px;
+  font-weight: 700;
+  background: #e6edf6;
+  color: #2d4158;
+  border-color: #bdcbda;
+}
+
+.rule-action-btn:hover {
+  filter: brightness(0.98);
+}
+
+.rules-table-wrap {
+  max-height: 360px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #304766;
+  text-align: left;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 10, 20, 0.62);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  width: min(440px, calc(100vw - 40px));
+  background: linear-gradient(180deg, #142239, #101a2b);
+  border: 1px solid #355072;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  text-align: center;
+}
+
+.modal-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.modal-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+@media (max-width: 920px) {
+  .charts-grid,
+  .sensor-grid,
+  .actuator-grid,
+  .rule-form {
+    grid-template-columns: 1fr;
+  }
+}

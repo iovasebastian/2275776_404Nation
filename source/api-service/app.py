@@ -152,6 +152,19 @@ async def change_actuator(actuator: str, state: str):
     else:
         return {"error": "Failed to change actuator", "details": response.text}
 
+
+@app.get("/actuators")
+async def get_actuators():
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "http://simulator:8080/api/actuators"
+        )
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": "Failed to fetch actuators", "details": response.text}
+
 async def broadcast(event: dict):
     dead_clients = []
 

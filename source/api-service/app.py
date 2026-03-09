@@ -102,8 +102,28 @@ async def new_rule(
 
     return {"status": "rule created"}
 
+@app.get("/rules")
+def get_rules(db: Session = Depends(get_db)):
+    result = db.execute(
+        text("""
+            SELECT id,
+                   sensor_name,
+                   operator,
+                   threshold_value,
+                   actuator_name,
+                   action_state
+            FROM rules
+        """)
+    )
+
+    rows = result.mappings().all()
+
+    return {
+        "rules": rows
+    }
+
 @app.put("/update-rule")
-async def update_rule(rule, db: Session = Depends(get_db)):
+async def update_rule(rule : dict = Body(), db: Session = Depends(get_db)):
     db.execute(
         text("""
             UPDATE rules
@@ -115,12 +135,12 @@ async def update_rule(rule, db: Session = Depends(get_db)):
             WHERE id = :id
         """),
         {
-            "id": rule.id,
-            "sensor_name": rule.sensor_name,
-            "operator": rule.operator,
-            "threshold_value": rule.threshold_value,
-            "actuator_name": rule.actuator_name,
-            "action_state": rule.action_state,
+            "id": rule["id"],
+            "sensor_name": rule["sensor_name"],
+            "operator": rule["operator"],
+            "threshold_value": rule["threshold_value"],
+            "actuator_name": rule["actuator_name"],
+            "action_state": rule["action_state"],
         }
     )
 
@@ -151,6 +171,19 @@ async def change_actuator(actuator: str, state: str):
         return {"message": f"Actuator {actuator} changed to {state}"}
     else:
         return {"error": "Failed to change actuator", "details": response.text}
+
+
+@app.get("/actuators")
+async def get_actuators():
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "http://simulator:8080/api/actuators"
+        )
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return {"error": "Failed to fetch actuators", "details": response.text}
 
 async def broadcast(event: dict):
     dead_clients = []

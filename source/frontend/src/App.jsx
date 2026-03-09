@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const API_BASE = (import.meta.env.VITE_API_BASE || 'http://localhost:8080').replace(/\/$/, '');  //When connecting to the backend, modify port to 8003
+const API_BASE = (import.meta.env.VITE_API_BASE || 'http://localhost:8080').replace(/\/$/, '');  //When connecting to the backend, modify this port to 8003
 const RULES_KEY = 'mars-rules-local';
 
 const SENSORS = [

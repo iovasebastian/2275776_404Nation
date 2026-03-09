@@ -64,9 +64,12 @@ async def poll_sensors() -> None:
                 payload = response.json()
                 normalized_event = normalize_sensor_event(payload)
                 store_event(normalized_event)
-                await publish_to_both_services(
-                    normalized_event.model_dump_json().encode("utf-8")
-                )
+                try:
+                    await publish_to_both_services(
+                        normalized_event.model_dump_json().encode("utf-8")
+                    )
+                except Exception as exc:
+                    print(f"[Sensor: {sensor_name}] Failed to publish event: {exc}")
             except httpx.HTTPStatusError as exc:
                 print(
                     f"[Sensor: {sensor_name}] HTTP error "

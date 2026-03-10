@@ -5,7 +5,7 @@ As a Habitat Operator, I want to view all active sensors and their latest readin
 As a Habitat Operator, I want the sensor data on my dashboard to update automatically in real-time, so that I always have the most current telemetry without needing to refresh the page.
 ![alt](./lo-fi/US2%2018.png)
 ## US3
-As a Habitat Operator, I want to see specific measurement units (e.g., C, kW, L/min) displayed alongside sensor values, so that I can interpret the data correctly.
+As a Habitat Operator, I want to see specific measurement units (e.g., °C, kW, L/min) displayed alongside sensor values, so that I can interpret the data correctly.
 ![alt](./lo-fi/US3.png)
 ## US4
 As a Habitat Operator, I want data from both slow-polling sensors and high-speed telemetry streams to be displayed in the same consistent format, so that I don't have to use different tools for different devices.
@@ -29,7 +29,7 @@ As a Habitat Operator, I want the system to automatically turn actuators ON or O
 As a Habitat Operator, I want to create new automation rules through a visual interface on the dashboard, so that I can quickly instruct the system how to react to new environmental threats.
 ![alt](./lo-fi/US10_1.png)
 ## US11
-As a Habitat Operator, I want to configure rule conditions using standard mathematical comparisons (<, <=, =, >, >=), so that I can set precise safety thresholds (e.g., trigger fan if temp > 28C).
+As a Habitat Operator, I want to configure rule conditions using standard mathematical comparisons (`<`, `<=`, `=`, `>`, `>=`), so that I can set precise safety thresholds (e.g., trigger fan if temp > 28°C).
 ![alt](./lo-fi/US11_1.png)
 ## US12
 As a Habitat Operator, I want to view a list of all currently active automation rules, so that I know exactly how the system is programmed to behave.
@@ -44,7 +44,7 @@ As a Habitat Operator, I want to delete obsolete automation rules, so that they 
 As a Habitat Operator, I want the automation service to log every time an automation rule automatically triggers an actuator to the console output, so that I can trace the system's autonomous decisions via container logs.
 ![alt](./lo-fi/US15.png)
 ## US16
-As a Platform Administrator, I want to deploy the entire habitat automation platform using a single startup command (docker compose up), so that recovery time is minimized during critical system failures.
+As a Platform Administrator, I want to deploy the entire habitat automation platform using a single startup command (`docker compose up`), so that recovery time is minimized during critical system failures.
 ![alt](./lo-fi/US16.png)
 ## US17
 As a Platform Administrator, I want the system's internal communication to use a resilient message broker, so that sudden spikes in sensor data do not overwhelm the processing engines.

@@ -190,10 +190,10 @@ function MiniChart({ title, unit, points }) {
           </g>
         ))}
         <text x="8" y="14" className="meta">
-          min: {min.toFixed(2)} {unit}
+          max: {max.toFixed(2)} {unit}
         </text>
         <text x="8" y={h - 8} className="meta">
-          max: {max.toFixed(2)} {unit}
+          min: {min.toFixed(2)} {unit}
         </text>
       </svg>
     </div>

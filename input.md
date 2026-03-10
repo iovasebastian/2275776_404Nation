@@ -1,22 +1,27 @@
+# SYSTEM DESCRIPTION:
+
+The Mars Habitat Automation Platform is a distributed, event-driven system. It allows operators to monitor and control the base's status via the system dashboard and console.
+The system dashboard displays various environmental data received from sensors in real time. Operators may control base actuators via the console and edit base automation rules.
+
 # USER STORIES:
 
-1) As a system backend, I want to periodically poll REST sensors every few seconds, so that I can capture the latest environmental states.
-2) As a system backend, I want to subscribe to WebSocket/SSE telemetry topics, so that I can capture real-time power and life support metrics.
-3) As a data processing service, I want to normalize all heterogeneous REST and Telemetry payloads into a single standard event schema, so that downstream services can process them uniformly.
-4) As an ingestion service, I want to publish normalized events to a central RabbitMQ message broker, so that the architecture remains decoupled and event-driven.
-5) As an automation service, I want to consume events from the message broker in real-time, so that I can evaluate them against active rules immediately upon arrival.
-6) As a database service, I want to persist automation rules in an SQLite database, so that rules are not lost during a system restart.
-7) As an automation service, I want to compare incoming sensor values against rule operators, so that I can determine if an action is required.
-8) As an automation service, I want to send a POST request to the actuator API when a rule condition is met, so that the physical habitat environment is adjusted.
-9) As a system backend, I want to maintain the latest state of each sensor in an in-memory cache, so that the frontend can load current states instantly without querying the broker.
-10) As an operator, I want to view a real-time dashboard, so that I can monitor the overall health of the Mars base at a glance.
-11) As an operator, I want to see the latest values of REST sensors, so that I know the status of vital resources.
-12) As an operator, I want to see a live updating line chart for telemetry streams, so that I can observe trends while the page is open.
-13) As a frontend client, I want to receive real-time sensor updates via WebSocket, so that the dashboard UI reflects changes without manual browser refreshes.
-14) As an operator, I want to see the current state (ON/OFF) of all actuators, so that I know which environmental controls are active.
-15) As an operator, I want to manually toggle an actuator's state (ON/OFF) from the dashboard, so that I can override the system in an emergency.
-16) As an operator, I want to view a list of all active automation rules in the dashboard UI, so that I know what automated actions the system is evaluating.
-17) As an operator, I want to create a new IF-THEN rule via the frontend interface, so that I can automate responses to new environmental threats.
-18) As an operator, I want to delete or disable an existing automation rule from the dashboard, so that I can stop unwanted actuator triggers.
-19) As an operator, I want to edit existing automation rules so that automation behavior can be adjusted when conditions change.
-20) As the system, I want to automatically discover available sensors from the simulator API so that new devices can be integrated without manual configuration.
+1) As a Habitat Operator, I want to view all active sensors and their latest readings on a unified dashboard, so that I can monitor the overall habitat environment at a glance.
+2) As a Habitat Operator, I want the sensor data on my dashboard to update automatically in real-time, so that I always have the most current telemetry without needing to refresh the page.
+3) As a Habitat Operator, I want to see specific measurement units (e.g., °C, kW, L/min) displayed alongside sensor values, so that I can interpret the data correctly.
+4) As a Habitat Operator, I want data from both slow-polling sensors and high-speed telemetry streams to be displayed in the same consistent format, so that I don't have to use different tools for different devices.
+5) As a Habitat Operator, I want new sensors to be automatically discovered and integrated into my monitoring view, so that I don't have to manually configure the system every time a new device is wired up.
+6) As a Habitat Operator, I want to clearly see the current operational state (ON/OFF) of all habitat actuators (e.g., cooling fans, heaters), so that I know exactly what life-support equipment is currently running.
+7) As a Habitat Operator, I want to manually toggle the state of any actuator directly from the dashboard, so that I can immediately intervene and override the system during an emergency.
+8) As a Habitat Operator, I want my manual actuator changes to be instantly reflected on the UI, so that I have immediate visual feedback that my command was executed.
+9) As a Habitat Operator, I want the system to automatically turn actuators ON or OFF based on environmental data, so that the habitat remains safe even while I am sleeping.
+10) As a Habitat Operator, I want to create new automation rules through a visual interface on the dashboard, so that I can quickly instruct the system how to react to new environmental threats.
+11) As a Habitat Operator, I want to configure rule conditions using standard mathematical comparisons (`<`, `<=`, `=`, `>`, `>=`), so that I can set precise safety thresholds (e.g., trigger fan if temp > 28°C).
+12) As a Habitat Operator, I want to view a list of all currently active automation rules, so that I know exactly how the system is programmed to behave.
+13) As a Habitat Operator, I want to edit existing automation rules, so that I can adjust safety thresholds as the mission parameters or seasons change.
+14) As a Habitat Operator, I want to delete obsolete automation rules, so that they don't trigger unwanted or conflicting system behaviors.
+15) As a Habitat Operator, I want the automation service to log every time an automation rule automatically triggers an actuator to the console output, so that I can trace the system's autonomous decisions via container logs.
+16) As a Platform Administrator, I want to deploy the entire habitat automation platform using a single startup command (`docker compose up`), so that recovery time is minimized during critical system failures.
+17) As a Platform Administrator, I want the system's internal communication to use a resilient message broker, so that sudden spikes in sensor data do not overwhelm the processing engines.
+18) As a Platform Administrator, I want the data ingestion, rule evaluation, and web interface to run as separate isolated microservices, so that a crash in the web UI does not stop the background automation engine from keeping the crew alive.
+19) As a Platform Administrator, I want all defined automation rules to be saved to a persistent database, so that critical safety logic is immediately restored without manual data entry after a system reboot.
+20) As a Platform Administrator, I want the platform to automatically normalize all heterogeneous device payloads into a single standard event format internally, so that future developers can add new features without worrying about device-specific dialects.

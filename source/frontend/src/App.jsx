@@ -377,72 +377,83 @@ export default function App() {
   };
 
   const submitRule = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const candidate = {
-      ...form,
-      id: form.id || Date.now(),
-      threshold_value: Number(form.threshold_value),
-      enabled: form.enabled !== false
-    };
-
-    const peerRules = rules.filter((r) => String(r.id) !== String(candidate.id));
-
-    if (peerRules.some((r) => ruleSig(r) === ruleSig(candidate))) {
-      showInfo('The rule already exists.');
-      return;
-    }
-
-    if (
-      peerRules.some(
-        (r) =>
-          ruleBaseSig(r) === ruleBaseSig(candidate) &&
-          r.action_state !== candidate.action_state
-      )
-    ) {
-      showInfo('This rule conflicts with the existing regulations.');
-      return;
-    }
-
-    try {
-      if (canEdit) {
-        await request('/update-rule', {
-          method: 'PUT',
-          body: {
-            id: candidate.id,
-            sensor_name: candidate.sensor_name,
-            operator: candidate.operator,
-            threshold_value: candidate.threshold_value,
-            actuator_name: candidate.actuator_name,
-            action_state: candidate.action_state
-          }
-        });
-
-        const next = uniqueRules(
-          rules.map((r) => (String(r.id) === String(candidate.id) ? candidate : r))
-        );
-        persistRulesLocally(next);
-      } else {
-        await request('/new-rule', {
-          method: 'POST',
-          body: {
-            sensor_name: candidate.sensor_name,
-            operator: candidate.operator,
-            threshold_value: candidate.threshold_value,
-            actuator_name: candidate.actuator_name,
-            action_state: candidate.action_state
-          }
-        });
-
-        const next = uniqueRules([...rules, candidate]);
-        persistRulesLocally(next);
-      }
-
-      setForm(EMPTY_FORM);
-    } catch {
-      showInfo(canEdit ? 'Failed to update rule.' : 'Failed to create rule.');
-    }
+  const candidate = {
+    ...form,
+    threshold_value: Number(form.threshold_value),
+    enabled: form.enabled !== false
   };
+
+  const peerRules = rules.filter((r) =>
+    canEdit ? String(r.id) !== String(form.id) : true
+  );
+
+  if (peerRules.some((r) => ruleSig(r) === ruleSig(candidate))) {
+    showInfo('The rule already exists.');
+    return;
+  }
+
+  if (
+    peerRules.some(
+      (r) =>
+        ruleBaseSig(r) === ruleBaseSig(candidate) &&
+        r.action_state !== candidate.action_state
+    )
+  ) {
+    showInfo('This rule conflicts with the existing regulations.');
+    return;
+  }
+
+  try {
+    if (canEdit) {
+      const updatedRule = {
+        ...candidate,
+        id: form.id
+      };
+
+      await request('/update-rule', {
+        method: 'PUT',
+        body: {
+          id: updatedRule.id,
+          sensor_name: updatedRule.sensor_name,
+          operator: updatedRule.operator,
+          threshold_value: updatedRule.threshold_value,
+          actuator_name: updatedRule.actuator_name,
+          action_state: updatedRule.action_state
+        }
+      });
+
+      const next = uniqueRules(
+        rules.map((r) => (String(r.id) === String(updatedRule.id) ? updatedRule : r))
+      );
+      persistRulesLocally(next);
+    } else {
+      const response = await request('/new-rule', {
+        method: 'POST',
+        body: {
+          sensor_name: candidate.sensor_name,
+          operator: candidate.operator,
+          threshold_value: candidate.threshold_value,
+          actuator_name: candidate.actuator_name,
+          action_state: candidate.action_state
+        }
+      });
+
+      const createdRule = {
+        ...candidate,
+        id: response.id, // or response.rule.id
+      };
+
+      const next = uniqueRules([...rules, createdRule]);
+      persistRulesLocally(next);
+    }
+
+    setForm(EMPTY_FORM);
+  } catch {
+    showInfo(canEdit ? 'Failed to update rule.' : 'Failed to create rule.');
+  }
+};
 
   const editRule = (r) =>
     setForm({

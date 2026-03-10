@@ -74,33 +74,26 @@ def db_schema(db: Session = Depends(get_db)):
 async def get_latest():
     return list(latest_events.values())
 
+from fastapi import Body
+
 @app.post("/new-rule")
-async def new_rule(
-    sensor_name: str = Body(...),
-    operator: str = Body(...),
-    threshold_value: float = Body(...),
-    actuator_name: str = Body(...),
-    action_state: str = Body(...),
-    db: Session = Depends(get_db)
-):
-    db.execute(
+async def new_rule(rule: dict = Body(...), db: Session = Depends(get_db)):
+    result = db.execute(
         text("""
             INSERT INTO rules
             (sensor_name, operator, threshold_value, actuator_name, action_state)
             VALUES (:sensor_name, :operator, :threshold_value, :actuator_name, :action_state)
         """),
-        {
-            "sensor_name": sensor_name,
-            "operator": operator,
-            "threshold_value": threshold_value,
-            "actuator_name": actuator_name,
-            "action_state": action_state,
-        }
+        rule
     )
 
     db.commit()
 
-    return {"status": "rule created"}
+    rule_id = result.lastrowid
+
+    return {
+        "id": rule_id
+    }
 
 @app.get("/rules")
 def get_rules(db: Session = Depends(get_db)):
